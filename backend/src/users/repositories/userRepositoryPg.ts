@@ -1,5 +1,6 @@
 import UserModel from "../database/userModel";
-import { IUserRepository, UserRepositoryErrors  } from "./iuserRepository";
+import { IUserRepository } from "./iuserRepository";
+import { UserRepositoryErrors } from "./userRepositoryErrors";
 import { User } from "../models/user";
 
 export class UserRepositoryPg implements IUserRepository {
