@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended: true}));
 
 
 /*Routers*/
-import userRouter from "./users/router/userRouter";
+import userRouter from "./users/controllers/userRouter";
 app.use("/users", userRouter);
 
 

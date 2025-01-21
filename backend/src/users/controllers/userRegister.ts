@@ -3,6 +3,7 @@ import { z } from "zod";
 import { UserRegisterDTO } from "../dtos/userRegisterDTO";
 import { UserRegisterService } from "../services/userRegisterService";
 import { UserRepositoryPg } from "../repositories/userRepositoryPg";
+import { User } from "../models/user";
 
 const userRegisterRouter: Router = Router();
 
@@ -40,6 +41,19 @@ userRegisterRouter.post("/", (req: Request, res: Response) => {
         let user: UserRegisterDTO = req.body;
         // TODO: implementar userRegisterService
         
+        userRegisterService.register({
+            id: 0,
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            password: user.password,
+            birthdate: new Date(user.birthdate),
+            country: user.country,
+            active: true,
+            created_at: new Date(),
+            updated_at: new Date()
+        });
+
         // res.send(`User ${user.name} is registered successfully!`).status(userRegisterResponse.USER_REGISTERED);
     } catch (error) {
         res.status(userRegisterResponse.INVALID_REQUEST).send(error);
