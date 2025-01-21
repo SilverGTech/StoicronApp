@@ -1,17 +1,17 @@
 import { Sequelize } from 'sequelize';
 
 const {
-    SCHEMA_NAME = 'stoicronApp',
-    USERNAME = 'admin',
-    PASSWORD = 'admin',
-    HOST = 'localhost',
-    PORT = 5001
+    SCHEMA_NAME_USERDB = 'stoicron',
+    USERNAME_USERDB = 'admin',
+    PASSWORD_USERDB = 'admin',
+    HOST_USERDB = 'localhost',
+    PORT_USERDB = 5001
 } = process.env;
 
-const sequelize: Sequelize = new Sequelize(SCHEMA_NAME, USERNAME, PASSWORD, {
-    host: HOST,
+const sequelize: Sequelize = new Sequelize(SCHEMA_NAME_USERDB, USERNAME_USERDB, PASSWORD_USERDB, {
+    host: HOST_USERDB,
     dialect: 'postgres',
-    port: Number(PORT),
+    port: Number(PORT_USERDB),
 });
 
 sequelize.authenticate()

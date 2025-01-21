@@ -1,5 +1,7 @@
 import { Router, Request, Response } from "express";
 import { z } from "zod";
+import { UserRepositoryPg } from "../repositories/userRepositoryPg";
+import { UserLoginService } from "../services/userLoginService";
 
 const userLoginRouter: Router = Router();
 
@@ -18,14 +20,20 @@ const userLoginResponse = {
     INVALID_REQUEST: 400
 }
 
+/* Instances  */
+
+const userRepositoryPg = new UserRepositoryPg();
+const userLoginService = new UserLoginService(userRepositoryPg);
 
 /* Routes */
 
-userLoginRouter.post("/", (req: Request, res: Response) => {
+userLoginRouter.post("/", async (req: Request, res: Response) => {
     try {
         userLoginSchema.parse(req.body);
         let user = req.body;
-        res.send(`User ${user.username} is logged in successfully!`).status(userLoginResponse.USER_LOGGED_IN);
+        if(await userLoginService.login(user.username, user.password)){
+            res.send(`User ${user.username} is logged in successfully!`).status(userLoginResponse.USER_LOGGED_IN);
+        }
     } catch (error) {
         res.status(userLoginResponse.INVALID_REQUEST).send(error);
     }

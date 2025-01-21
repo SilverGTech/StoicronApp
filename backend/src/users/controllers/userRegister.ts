@@ -3,7 +3,8 @@ import { z } from "zod";
 import { UserRegisterDTO } from "../dtos/userRegisterDTO";
 import { UserRegisterService } from "../services/userRegisterService";
 import { UserRepositoryPg } from "../repositories/userRepositoryPg";
-import { User } from "../models/user";
+import { encryptPassword } from "../utils/passwordEncrypt";
+import { UserProvider } from "../models/userProvider";
 
 const userRegisterRouter: Router = Router();
 
@@ -15,7 +16,10 @@ const userRegisterSchema = z.object({
     email: z.string().email(),
     password: z.string(),
     birthdate: z.string(),
-    country: z.string()
+    country: z.string(),
+    alternative_email: z.string().optional(),
+    user_provider: z.string(),
+    role: z.string()
 });
 
 /* Response code */
@@ -39,22 +43,24 @@ userRegisterRouter.post("/", (req: Request, res: Response) => {
     try {
         userRegisterSchema.parse(req.body);
         let user: UserRegisterDTO = req.body;
-        // TODO: implementar userRegisterService
         
         userRegisterService.register({
             id: 0,
             name: user.name,
             username: user.username,
             email: user.email,
-            password: user.password,
+            password: encryptPassword(user.password),
             birthdate: new Date(user.birthdate),
             country: user.country,
             active: true,
             created_at: new Date(),
-            updated_at: new Date()
+            updated_at: new Date(),
+            alternative_email: "",
+            user_provider: UserProvider.LOCAL,
+            role: "user"
         });
 
-        // res.send(`User ${user.name} is registered successfully!`).status(userRegisterResponse.USER_REGISTERED);
+        res.send(`User ${user.name} is registered successfully!`).status(userRegisterResponse.USER_REGISTERED);
     } catch (error) {
         res.status(userRegisterResponse.INVALID_REQUEST).send(error);
     }

@@ -1,3 +1,4 @@
+import { UserProvider } from './userProvider';
 
 export interface User {
     id: number;
@@ -9,6 +10,8 @@ export interface User {
     password: string;
     active: boolean;
     country: string;
-    created_at: Date;
-    updated_at: Date;
+    created_at?: Date;
+    updated_at?: Date;
+    user_provider: UserProvider | string;
+    role: string;
 }

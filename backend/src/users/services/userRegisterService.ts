@@ -9,17 +9,14 @@ export class UserRegisterService {
         this.userRepository = userRepository;
     }
 
-    async register(user: User): Promise<string> {
+    async register(user: User): Promise<Boolean> {
+        let status: Boolean = false;
         try {
             await this.userRepository.create(user);
+            status = true;
         } catch (error: any) {
-            if (error.message === UserRepositoryErrors.USER_ALREADY_EXISTS) {
-                throw new Error('User already exists');
-            }
-            if (error.message === UserRepositoryErrors.USER_NOT_CREATED) {
-                throw new Error('User not created');
-            }
+            throw new Error(UserRepositoryErrors.USER_NOT_CREATED);
         } 
-        return 'User registered';
+        return status;
     }
 }

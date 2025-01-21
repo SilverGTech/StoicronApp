@@ -13,6 +13,8 @@ class UserModel extends Model {
     public readonly updated_at!: Date;
     public active!: boolean;
     public alternative_email!: string;
+    public user_provider!: string;
+    public role!: string;
 }
 
 UserModel.init({
@@ -52,6 +54,14 @@ UserModel.init({
     alternative_email: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    user_provider: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    role: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     sequelize,
