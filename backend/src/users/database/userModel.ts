@@ -25,32 +25,33 @@ UserModel.init({
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     name: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     username: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: true
     },
     birthdate: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: true
     },
     country: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     active: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: true,
+        defaultValue: true
     },
     alternative_email: {
         type: DataTypes.STRING,
@@ -58,11 +59,11 @@ UserModel.init({
     },
     user_provider: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     role: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     }
 }, {
     sequelize,
