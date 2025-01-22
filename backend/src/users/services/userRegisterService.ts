@@ -16,7 +16,8 @@ export class UserRegisterService {
             status = true;
         } catch (error: any) {
             throw new Error(UserRepositoryErrors.USER_NOT_CREATED);
-        } 
-        return status;
+        } finally {
+            return status;
+        }
     }
 }

@@ -1,7 +1,7 @@
 import { UserProvider } from './userProvider';
 
 export interface User {
-    id: number;
+    id?: number;
     name: string;
     username: string;
     birthdate: Date;

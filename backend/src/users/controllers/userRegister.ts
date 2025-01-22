@@ -18,8 +18,7 @@ const userRegisterSchema = z.object({
     birthdate: z.string(),
     country: z.string(),
     alternative_email: z.string().optional(),
-    user_provider: z.string(),
-    role: z.string()
+    user_provider: z.string()
 });
 
 /* Response code */
@@ -39,13 +38,12 @@ const userRegisterService = new UserRegisterService(userRepositoryPg);
 
 /* Routes */
 
-userRegisterRouter.post("/", (req: Request, res: Response) => {
+userRegisterRouter.post("/", async (req: Request, res: Response) => {
     try {
         userRegisterSchema.parse(req.body);
         let user: UserRegisterDTO = req.body;
         
-        userRegisterService.register({
-            id: 0,
+        const userRegistered:Boolean = await userRegisterService.register({
             name: user.name,
             username: user.username,
             email: user.email,
@@ -59,7 +57,10 @@ userRegisterRouter.post("/", (req: Request, res: Response) => {
             user_provider: UserProvider.LOCAL,
             role: "user"
         });
-
+        if(!userRegistered) {
+            res.status(userRegisterResponse.USER_ALREADY_EXISTS).send(`User ${user.name} already exists!`);
+            return;
+        }
         res.send(`User ${user.name} is registered successfully!`).status(userRegisterResponse.USER_REGISTERED);
     } catch (error) {
         res.status(userRegisterResponse.INVALID_REQUEST).send(error);

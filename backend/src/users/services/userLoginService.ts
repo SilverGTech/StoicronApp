@@ -1,6 +1,7 @@
 import { IUserRepository } from "../repositories/iuserRepository";
 import { UserRepositoryErrors } from "../repositories/userRepositoryErrors";
 import { comparePassword } from "../utils/passwordEncrypt";
+import { User } from "../models/user";
 
 
 export class UserLoginService {
@@ -10,7 +11,7 @@ export class UserLoginService {
         this.userRepository = userRepository;
     }
 
-    async login(username: string, password: string): Promise<Boolean> {
+    async login(username: string, password: string): Promise<User> {
         const user = await this.userRepository.findByUsername(username);
         if (!user) {
             throw new Error(UserRepositoryErrors.USER_NOT_FOUND);
@@ -18,6 +19,6 @@ export class UserLoginService {
         if (!comparePassword(password, user.password)) {
             throw new Error(UserRepositoryErrors.USER_INVALID_PASSWORD);
         }
-        return true;
+        return user;
     }
 }

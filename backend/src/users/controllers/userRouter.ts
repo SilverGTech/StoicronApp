@@ -11,8 +11,12 @@ userRouter.get("/", (req: Request, res: Response) => {
 /* Routers */
 import userRegisterRouter from "./userRegister";
 import userLoginRouter from "./userLogin";
+import userLogoutRouter from "./userLogout";
+
 userRouter.use("/register", userRegisterRouter);
 userRouter.use("/login", userLoginRouter);
+userRouter.use("/logout", userLogoutRouter);
+
 
 
 export default userRouter;

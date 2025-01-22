@@ -17,7 +17,9 @@ export class UserRepositoryPg implements IUserRepository {
                 active: user.active,
                 alternative_email: user.alternative_email,
                 user_provider: user.user_provider,
-                role: user.role
+                role: user.role,
+                created_at: new Date(),
+                updated_at: new Date()
             });
             return user;
         } catch (error) {
@@ -43,7 +45,6 @@ export class UserRepositoryPg implements IUserRepository {
                 throw new Error(UserRepositoryErrors.USER_NOT_FOUND);
             }
             const userObj: User = {
-                id: user.id,
                 email: user.email,
                 password: user.password,
                 name: user.name,

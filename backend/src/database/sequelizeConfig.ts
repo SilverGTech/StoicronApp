@@ -15,8 +15,11 @@ const sequelize: Sequelize = new Sequelize(SCHEMA_NAME_USERDB, USERNAME_USERDB, 
 });
 
 sequelize.authenticate()
-    .then(() => {
+    .then(async () => {
         console.log('Connection has been established successfully.');
+        await sequelize.sync({
+            alter: true
+        });
     })
     .catch((error) => {
         console.error('Unable to connect to the database:', error);

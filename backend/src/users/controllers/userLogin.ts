@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { z } from "zod";
 import { UserRepositoryPg } from "../repositories/userRepositoryPg";
 import { UserLoginService } from "../services/userLoginService";
+import { sign, verify } from "../utils/jwt";
 
 const userLoginRouter: Router = Router();
 
@@ -31,9 +32,17 @@ userLoginRouter.post("/", async (req: Request, res: Response) => {
     try {
         userLoginSchema.parse(req.body);
         let user = req.body;
-        if(await userLoginService.login(user.username, user.password)){
-            res.send(`User ${user.username} is logged in successfully!`).status(userLoginResponse.USER_LOGGED_IN);
+        const userInternal = await userLoginService.login(user.username, user.password)
+        let payload = {
+            username: userInternal.username,
+            role: userInternal.role
+        };
+        let token = sign(payload);
+        if(!userInternal){
+            res.send().status(userLoginResponse.INVALID_REQUEST);
+            return;
         }
+        res.status(userLoginResponse.USER_LOGGED_IN).cookie('session', token, { httpOnly: true }).send();
     } catch (error) {
         res.status(userLoginResponse.INVALID_REQUEST).send(error);
     }

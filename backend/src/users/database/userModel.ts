@@ -21,7 +21,7 @@ UserModel.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true    
+        primaryKey: true,  
     },
     email: {
         type: DataTypes.STRING,
@@ -37,7 +37,8 @@ UserModel.init({
     },
     username: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     birthdate: {
         type: DataTypes.DATE,
