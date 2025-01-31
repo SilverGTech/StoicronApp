@@ -1,0 +1,57 @@
+:root{
+    --primary-color: #FFFFFF;
+    --secondary-color:#171A1F;
+    --accent-color:#9095A0;
+    --gray-color: #424955;
+    --font-family: "Archivo";
+    --background-color:#808080;
+}
+/* con razon lloraba el niño */
+*{
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    
+}
+
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+    padding: 10px;
+    background-color: var(--background-color);
+}
+/* esta estuvo buena papi */
+.navbar_logo_group{ 
+    display: flex;
+    align-items: center;
+    
+}
+
+.navbar_logo_group:hover{
+    cursor: pointer;
+
+}
+
+
+
+.menu{
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+
+}
+
+.menu_item a{ 
+    text-decoration: none;
+    padding: 10px;
+    color: var(--secondary-color);
+}
+
+.menu_item a:hover{
+    color:var(--primary-color);
+}
+
+
+
