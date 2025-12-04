@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: stoicron-back
+  mongodb:
+    uri: ${STOICRONBACK_DB_URI:mongodb://root:root@localhost:28000/stoicron_db?authSource=admin}
+    database: ${STOICRONBACK_DB_NAME:stoicron_db}
+    username: ${STOICRONBACK_DB_USER:root}
+    password: ${STOICRONBACK_DB_PASS:root}
+
+
+server:
+  port: ${STOICRONBACK_PORT:5000}
+
