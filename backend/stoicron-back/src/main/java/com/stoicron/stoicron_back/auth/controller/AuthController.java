@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.stoicron.stoicron_back.auth.dto.LoginDTO;
 import com.stoicron.stoicron_back.auth.dto.RegisterDTO;
 import com.stoicron.stoicron_back.auth.dto.SessionDTO;
+import com.stoicron.stoicron_back.auth.model.AuthUser;
 import com.stoicron.stoicron_back.auth.service.AuthUserService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,9 +30,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String postRegister(@RequestBody RegisterDTO entity) {
-        
-        return null;
+    public AuthUser postRegister(@RequestBody RegisterDTO registerDto) {  
+        return authUserService.registerUser(registerDto);
     }
     
     
