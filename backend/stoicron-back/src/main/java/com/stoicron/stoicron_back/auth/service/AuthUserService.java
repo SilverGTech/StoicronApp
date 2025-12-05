@@ -22,10 +22,12 @@ public class AuthUserService {
 
     private final AuthUserRepository authUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthTokenService authTokenService;
 
-    public AuthUserService(AuthUserRepository authUserRepository, PasswordEncoder passwordEncoder) {
+    public AuthUserService(AuthUserRepository authUserRepository, PasswordEncoder passwordEncoder, AuthTokenService authTokenService) {
         this.authUserRepository = authUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authTokenService = authTokenService;
     }
 
     public SessionDTO doLogin(String username, String password) throws NoUserException, InvalidUserInfoException {
@@ -38,11 +40,11 @@ public class AuthUserService {
         }
         SessionDTO session = new SessionDTO();
         session.setSessionToken("");
-        session.setSessionExpirationToken("");
+        session.setRefreshToken("");
         return session;
     }
 
-    public AuthUser registerUser(RegisterDTO registerDto) {
+    public SessionDTO registerUser(RegisterDTO registerDto) {
         registerDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         AuthUser newUser = new AuthUser();
         newUser.setUsername(registerDto.getUsername());
@@ -51,12 +53,20 @@ public class AuthUserService {
         newUser.setRole(Roles.USER.getRoleName());
         newUser.setCreatedAt(Instant.now());
         newUser.setUpdatedAt(null);
-
         newUser = authUserRepository.save(newUser);
 
-        newUser.setPassword(null);
-        return newUser;
+        String token = authTokenService.generateToken(newUser);
+        String refreshToken = authTokenService.generateRefreshToken(newUser);
+        authTokenService.saveToken(newUser, token);
+
+        SessionDTO session = new SessionDTO();
+        session.setSessionToken(token);
+        session.setRefreshToken(refreshToken);
+        return session;
+
     }
+
+
     
     
 }

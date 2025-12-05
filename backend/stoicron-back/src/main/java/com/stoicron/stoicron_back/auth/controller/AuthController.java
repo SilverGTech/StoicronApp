@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.stoicron.stoicron_back.auth.dto.LoginDTO;
 import com.stoicron.stoicron_back.auth.dto.RegisterDTO;
 import com.stoicron.stoicron_back.auth.dto.SessionDTO;
-import com.stoicron.stoicron_back.auth.model.AuthUser;
 import com.stoicron.stoicron_back.auth.service.AuthUserService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -25,14 +25,22 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-    public SessionDTO postLogin(@RequestBody LoginDTO loginDto) throws Exception {
+    public SessionDTO postLogin(@RequestBody final LoginDTO loginDto) throws Exception {
         return authUserService.doLogin(loginDto.getUsername(), loginDto.getPassword());
     }
 
     @PostMapping("/register")
-    public AuthUser postRegister(@RequestBody RegisterDTO registerDto) {  
-        return authUserService.registerUser(registerDto);
+    public ResponseEntity<SessionDTO> postRegister(@RequestBody final RegisterDTO registerDto) { 
+        SessionDTO session = authUserService.registerUser(registerDto); 
+        return ResponseEntity.ok(session);
     }
+
+    @PostMapping("/refresh")
+    public String postMethodName(@RequestBody String entity) {
+        
+        return entity;
+    }
+    
     
     
     

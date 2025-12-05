@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SessionDTO {
-    private String sessionExpirationToken;
+    private String refreshToken;
     private String sessionToken;
 }
