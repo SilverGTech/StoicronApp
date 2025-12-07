@@ -57,4 +57,15 @@ public class AuthTokenService {
         authToken.setCreatedAt(Instant.now());
         authTokenRepository.save(authToken);
     }
+
+    public void revokeAllUserTokens(AuthUser user) {
+        var validUserTokens = authTokenRepository.findByUserIdAndRevokedFalseAndExpiredFalse(user.getId());
+        if (validUserTokens.isEmpty())
+            return;
+        for (var token : validUserTokens) {
+            token.setRevoked(true);
+            token.setExpired(true);
+        }
+        authTokenRepository.saveAll(validUserTokens);
+    }
 }

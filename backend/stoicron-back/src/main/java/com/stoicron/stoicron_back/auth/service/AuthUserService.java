@@ -2,6 +2,10 @@ package com.stoicron.stoicron_back.auth.service;
 
 import java.time.Instant;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,24 +27,36 @@ public class AuthUserService {
     private final AuthUserRepository authUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthTokenService authTokenService;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthUserService(AuthUserRepository authUserRepository, PasswordEncoder passwordEncoder, AuthTokenService authTokenService) {
+    public AuthUserService(AuthUserRepository authUserRepository, PasswordEncoder passwordEncoder,
+            AuthTokenService authTokenService, AuthenticationManager authenticationManager) {
         this.authUserRepository = authUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.authTokenService = authTokenService;
+        this.authenticationManager = authenticationManager;
     }
 
     public SessionDTO doLogin(String username, String password) throws NoUserException, InvalidUserInfoException {
-        AuthUser user = authUserRepository.findByUsername(username);
+        Authentication authentication = authenticationManager
+                .authenticate(new 
+                    UsernamePasswordAuthenticationToken(username, password));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        final AuthUser user = authUserRepository.findByUsername(username);
         if (user == null) {
-            throw new NoUserException(Errors.USER_NOT_FOUND);
+            throw new NoUserException(Errors.INVALID_CREDENTIALS);
         }
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new InvalidUserInfoException(Errors.INVALID_CREDENTIALS);
-        }
+        ;
+
+        String token = authTokenService.generateToken(user);
+        String refreshToken = authTokenService.generateRefreshToken(user);
+        authTokenService.saveToken(user, token);
+
         SessionDTO session = new SessionDTO();
-        session.setSessionToken("");
-        session.setRefreshToken("");
+        session.setSessionToken(token);
+        session.setRefreshToken(refreshToken);
         return session;
     }
 
@@ -66,7 +82,4 @@ public class AuthUserService {
 
     }
 
-
-    
-    
 }

@@ -7,6 +7,12 @@ spring:
     username: ${STOICRONBACK_DB_USER:root}
     password: ${STOICRONBACK_DB_PASS:root}
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.authentication: TRACE
+
+
 
 server:
   port: ${STOICRONBACK_PORT:5000}
