@@ -37,7 +37,6 @@ public class SecurityConfig {
             if (user == null) {
                 throw new RuntimeException(new NoUserFoundException(Errors.NO_USER_FOUND));
             }
-            log.info("User found: " + user.getUsername() + "whit password: " + user.getPassword());
             return org.springframework.security.core.userdetails.User.builder().username(user.getUsername())
                     .password(user.getPassword()).build();
         };

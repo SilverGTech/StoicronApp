@@ -39,8 +39,7 @@ public class AuthUserService {
 
     public SessionDTO doLogin(String username, String password) throws NoUserException, InvalidUserInfoException {
         Authentication authentication = authenticationManager
-                .authenticate(new 
-                    UsernamePasswordAuthenticationToken(username, password));
+                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -61,7 +60,6 @@ public class AuthUserService {
     }
 
     public SessionDTO registerUser(RegisterDTO registerDto) {
-        registerDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         AuthUser newUser = new AuthUser();
         newUser.setUsername(registerDto.getUsername());
         newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
