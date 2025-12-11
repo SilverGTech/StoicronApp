@@ -7,7 +7,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.mongodb.lang.NonNull;
@@ -23,7 +22,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
-@Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
@@ -56,6 +54,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 final String userId = authTokenService.extractUserId(jwt);
 
                 if ( userId == null || SecurityContextHolder.getContext().getAuthentication() != null) {
+                    filterChain.doFilter(request, response);
                     return;
                 }
 
@@ -77,12 +76,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                 final boolean isTokenValid = authTokenService.isTokenValid(jwt, user);
                 if (!isTokenValid) {
+                    filterChain.doFilter(request, response);
                     return;
                 }
 
                 final var sessionAuth = new  UsernamePasswordAuthenticationToken(userDetails, 
                     null, userDetails.getAuthorities());
                 sessionAuth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(sessionAuth);
 
                 filterChain.doFilter(request, response);
             }
