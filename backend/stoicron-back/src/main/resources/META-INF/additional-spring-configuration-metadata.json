@@ -1,0 +1,30 @@
+{
+    "properties": [
+        {
+            "name": "application",
+            "type": "java.lang.Object",
+            "description": "Root configuration properties for the application."
+        },
+        {
+            "name": "application.jwt",
+            "type": "java.lang.Object",
+            "description": "Configuration properties for JWT (JSON Web Token) settings."
+
+        },
+        {
+            "name": "application.jwt.refresh-expiration-ms",
+            "type": "java.lang.String",
+            "description": "Expiration time for JWT refresh tokens in milliseconds."
+        },
+        {
+            "name": "application.jwt.expiration-ms",
+            "type": "java.lang.String",
+            "description": "Expiration time for JWT tokens in milliseconds."
+        },
+        {
+            "name": "application.jwt.secret",
+            "type": "java.lang.String",
+            "description": "Secret key used for signing JWT tokens."
+        }
+    ]
+}

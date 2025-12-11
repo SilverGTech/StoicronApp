@@ -6,4 +6,6 @@ import com.stoicron.stoicron_back.auth.model.AuthUser;
 
 public interface AuthUserRepository extends MongoRepository<AuthUser, String> {
     AuthUser findByUsername(String username);
+    AuthUser findByEmail(String email);
+    
 }
