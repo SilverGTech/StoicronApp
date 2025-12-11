@@ -6,11 +6,15 @@ import com.stoicron.stoicron_back.auth.dto.LoginDTO;
 import com.stoicron.stoicron_back.auth.dto.RegisterDTO;
 import com.stoicron.stoicron_back.auth.dto.SessionDTO;
 import com.stoicron.stoicron_back.auth.service.AuthUserService;
+import com.stoicron.stoicron_back.auth.service.exception.InvalidTokenException;
+import com.stoicron.stoicron_back.auth.service.exception.NoUserException;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @RestController
 @RequestMapping("/auth")
@@ -34,9 +38,8 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public String postMethodName(@RequestBody String entity) {
-
-        return entity;
+    public SessionDTO postMethodName(@RequestHeader(HttpHeaders.AUTHORIZATION) final String authHeader) throws NoUserException, InvalidTokenException {
+        return authUserService.refreshToken(authHeader);
     }
 
 }

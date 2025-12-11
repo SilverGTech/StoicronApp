@@ -1,6 +1,7 @@
 package com.stoicron.stoicron_back.auth.service;
 
 import java.time.Instant;
+import java.util.Optional;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +14,7 @@ import com.stoicron.stoicron_back.auth.dto.RegisterDTO;
 import com.stoicron.stoicron_back.auth.dto.SessionDTO;
 import com.stoicron.stoicron_back.auth.model.AuthUser;
 import com.stoicron.stoicron_back.auth.repository.AuthUserRepository;
+import com.stoicron.stoicron_back.auth.service.exception.InvalidTokenException;
 import com.stoicron.stoicron_back.auth.service.exception.InvalidUserInfoException;
 import com.stoicron.stoicron_back.auth.service.exception.NoUserException;
 import com.stoicron.stoicron_back.auth.utils.Errors;
@@ -78,6 +80,32 @@ public class AuthUserService {
         session.setRefreshToken(refreshToken);
         return session;
 
+    }
+
+    public SessionDTO refreshToken(String authHeader) throws NoUserException, InvalidTokenException {
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Authorization header");
+        }
+        final String refreshToken = authHeader.substring(7);
+        final String userId = authTokenService.extractUserId(refreshToken);
+        if (userId == null) {
+            throw new NoUserException(Errors.INVALID_CREDENTIALS);
+        }
+
+        final Optional<AuthUser> user = Optional.of(authUserRepository.findById(userId))
+                .orElseThrow(() -> new NoUserException(Errors.USER_NOT_FOUND));
+
+        if(!authTokenService.isTokenValid(refreshToken, user.get())){
+            throw new InvalidTokenException(Errors.INVALID_TOKEN);
+        }
+
+        final String newToken = authTokenService.generateToken(user.get());
+        authTokenService.revokeAllUserTokens(user.get());
+        authTokenService.saveToken(user.get(), newToken);
+        SessionDTO session = new SessionDTO();
+        session.setSessionToken(newToken);
+        session.setRefreshToken(refreshToken);
+        return session;
     }
 
 }
