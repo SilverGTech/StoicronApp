@@ -1,6 +1,15 @@
 h1{
     font-family: "Archivo" 
 }
+button{
+    font-family: "Archivo";
+}
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
 
 .title_icon{
        display: flex;
@@ -10,5 +19,18 @@ h1{
 
 .nav_links{
     display: flex;
-    justify-content: flex-end;
+    justify-content: end;
+    
 }
+.nav_list{
+    display: flex;
+    list-style-type: none;
+    gap: 40px;
+    font-family: "Archivo";  
+}
+
+.nav_list a {
+    text-decoration: none;
+    color: black;
+}
+
