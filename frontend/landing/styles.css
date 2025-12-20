@@ -34,3 +34,6 @@ button{
     color: black;
 }
 
+.nav_list a:hover{
+    color: grey;
+}
