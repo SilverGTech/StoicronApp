@@ -66,7 +66,6 @@ button{
 
 .hero{
     display: flex;
-    padding: 80px 80px;
     justify-content: space-between;
     padding: 60px 80px;
 }
@@ -101,7 +100,36 @@ button{
     transform: translateY(-80px); /* sube la imagen */
 }
 
-.about_us{
-    text-align: center;
+.about{
+    display: flex;
+    padding: 50px;
+    justify-content: center;
+    align-items: center;
+    gap: 200px;
+    margin: 0 auto;
+    
 }
+
+.about_text{
+    text-align: center;
+    font-family:"Archivo";
+    font-size: 30px;
+
+}
+
+.about_content{
+    max-width: 40%;
+    font-size: 20px;
+}
+.about_content p{
+    font-family: "Inter";
+    font-weight: 500;
+    
+}
+.image_2{
+  margin-right: 120px;
+}
+    
+   
+
    
