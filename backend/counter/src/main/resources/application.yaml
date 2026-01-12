@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: counter
+  # DataSource configuration
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:127.0.0.1}:${DB_PORT:5433}/${DB_NAME:stoicron_db}
+    username: ${DB_USER:stoicron_user}
+    password: ${DB_PASSWORD:stoicron_password}
+    driver-class-name: org.postgresql.Driver
+  # JPA configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+server:
+  port: ${SERVER_PORT:5001}
