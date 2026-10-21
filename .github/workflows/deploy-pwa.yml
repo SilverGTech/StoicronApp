@@ -1,0 +1,38 @@
+name: Deploy PWA (Netlify)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/pwa/**'
+      - '.github/workflows/deploy-pwa.yml'
+  workflow_dispatch:
+
+# Evita despliegues simultáneos; el más nuevo cancela al anterior
+concurrency:
+  group: deploy-pwa
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend/pwa
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/pwa/package-lock.json
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Deploy to Netlify
+        run: npx --yes netlify-cli deploy --dir=dist --prod --no-build
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
