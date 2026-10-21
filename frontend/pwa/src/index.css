@@ -466,3 +466,54 @@ hr {
     height: 52px;
   }
 }
+
+/* ---------- Diálogo de confirmación ---------- */
+
+.sheet-backdrop.modal {
+  align-items: center;
+  padding: 20px;
+}
+
+.dialog {
+  width: 100%;
+  max-width: 340px;
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fade 0.2s ease-out;
+}
+
+.dialog h2 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.dialog p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.dialog-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dialog-btn.danger {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}

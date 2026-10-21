@@ -68,6 +68,12 @@ export const TEXT = {
   skip: 'Saltar fase',
   settingsOpen: 'Ajustes',
   tabTitle: (time: string, phaseLabel: string) => `${time} · ${phaseLabel}`,
+  switchPhase: {
+    title: '¿Cambiar de fase?',
+    message: 'El contador en curso se reiniciará y perderás el tiempo avanzado.',
+    confirm: 'Sí, cambiar',
+    cancel: 'Seguir aquí',
+  },
   settings: {
     title: 'Ajustes',
     done: 'Listo',
