@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { usePomodoro } from './hooks/usePomodoro'
 import { useWakeLock } from './hooks/useWakeLock'
+import type { Phase } from './lib/types'
 import { APP, PHASE_LABEL, PHASES, TEXT } from './lib/constants'
 import { SettingsSheet } from './components/SettingsSheet'
+import { ConfirmDialog } from './components/ConfirmDialog'
 import { Ring } from './components/Ring'
 import { PhilosopherQuote } from './components/PhilosopherQuote'
 
@@ -17,6 +19,7 @@ export default function App() {
   const p = usePomodoro()
   const { state, settings, stats } = p
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [pendingPhase, setPendingPhase] = useState<Phase | null>(null)
   const running = state.status === 'running'
   const time = formatTime(p.remainingMs)
 
@@ -26,6 +29,17 @@ export default function App() {
   useEffect(() => {
     document.title = running ? TEXT.tabTitle(time, PHASE_LABEL[state.phase]) : APP.name
   }, [running, time, state.phase])
+
+  // Si hay un conteo en curso o pausado, pedir confirmación antes de descartarlo
+  const requestPhase = (ph: Phase) => {
+    if (ph === state.phase) return
+    if (state.status === 'idle') p.selectPhase(ph)
+    else setPendingPhase(ph)
+  }
+  const confirmPhase = () => {
+    if (pendingPhase) p.selectPhase(pendingPhase)
+    setPendingPhase(null)
+  }
 
   const mainLabel = running ? TEXT.main.pause : state.status === 'paused' ? TEXT.main.resume : TEXT.main.start
 
@@ -46,7 +60,7 @@ export default function App() {
           <button
             key={ph}
             className={ph === state.phase ? 'active' : ''}
-            onClick={() => p.selectPhase(ph)}
+            onClick={() => requestPhase(ph)}
             aria-pressed={ph === state.phase}
           >
             {PHASE_LABEL[ph]}
@@ -89,6 +103,17 @@ export default function App() {
           {TEXT.settingsOpen}
         </button>
       </footer>
+
+      {pendingPhase && (
+        <ConfirmDialog
+          title={TEXT.switchPhase.title}
+          message={TEXT.switchPhase.message}
+          confirmLabel={TEXT.switchPhase.confirm}
+          cancelLabel={TEXT.switchPhase.cancel}
+          onConfirm={confirmPhase}
+          onCancel={() => setPendingPhase(null)}
+        />
+      )}
 
       {settingsOpen && (
         <SettingsSheet settings={settings} onChange={p.updateSettings} onClose={() => setSettingsOpen(false)} />
