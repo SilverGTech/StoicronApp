@@ -10,6 +10,9 @@ export const APP = {
   themeColor: '#ffffff',
 } as const
 
+/** Icono del filósofo (en /public) */
+export const PHILOSOPHER_ICON = '/filosofo.svg'
+
 /* ---------- Fases ---------- */
 
 export const PHASES: readonly Phase[] = ['work', 'short', 'long']
